@@ -21,7 +21,14 @@ export function RootLayout() {
   const notificationListener = useRef<Notifications.Subscription | null>(null);
 
   useEffect(() => {
-    registerForPushNotificationsAsync();
+    // call registration in an async IIFE and handle errors to avoid "Uncaught (in promise)"
+    (async () => {
+      try {
+        await registerForPushNotificationsAsync();
+      } catch (e) {
+        console.warn('registerForPushNotificationsAsync threw:', e);
+      }
+    })();
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       const data = notification.request.content.data as { screen?: string; pageIndex?: number };

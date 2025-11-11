@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "394461543295",
+    "project_id": "sync-f4937",
+    "storage_bucket": "sync-f4937.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394461543295:android:b7c5fe9de36940ea53384a",
+        "android_client_info": {
+          "package_name": "com.lensatom.syncengineerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9ZJJjHsZmYUivAO8pn4CbWURCyJK-9uM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

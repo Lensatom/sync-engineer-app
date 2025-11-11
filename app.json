@@ -20,7 +20,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.lensatom.syncengineerapp"
+      "package": "com.lensatom.syncengineerapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",
