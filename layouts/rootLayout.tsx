@@ -7,12 +7,39 @@ import { StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TamaguiProvider } from 'tamagui';
 
+import * as Notifications from 'expo-notifications';
+import { useRouter } from 'expo-router';
+import { useEffect, useRef } from 'react';
+import { playAlertSound, registerForPushNotificationsAsync } from '../utils/notifications';
+
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 export function RootLayout() {
-  // const colorScheme = useColorScheme();
+  const router = useRouter();
+  const notificationListener = useRef<Notifications.Subscription | null>(null);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      const data = notification.request.content.data as { screen?: string; pageIndex?: number };
+
+      if (data?.screen === 'pager') {
+        playAlertSound();
+        router.push({
+          pathname: '/pager',
+          params: { index: String(data.pageIndex ?? 0), alert: 'true' },
+        });
+      }
+    });
+
+    return () => {
+      notificationListener.current?.remove();
+      notificationListener.current = null;
+    };
+  }, []);
 
   return (
     <TamaguiProvider config={config}>
