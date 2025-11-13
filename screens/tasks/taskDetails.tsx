@@ -4,6 +4,7 @@ import { StatusPill } from '@/components/shared'
 import { Button, HorizontalLine, Icon, Text } from '@/components/ui'
 import { completeStatus } from '@/constants/shared'
 import { statusColors } from '@/constants/ui'
+import { formatDate } from '@/helpers/utils'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator } from 'react-native'
@@ -106,7 +107,7 @@ export function TaskDetails() {
                         <View w="$4" h="$4" borderWidth={3} bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"} borderColor="$white" br="$full" elevationAndroid={2}></View>
                       </XStack>
                       <Text fos={11} fow="600" mt="$3" color="$gray12" tt="capitalize">{statusLog[index]?.status.toLowerCase()}</Text>
-                      <Text fos={9} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
+                      <Text fos={9} color="$gray12" mt="$1">{formatDate(statusLog[index]?.time)}</Text>
                     </YStack>
                   )
                 )

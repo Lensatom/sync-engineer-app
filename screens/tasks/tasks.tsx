@@ -14,7 +14,7 @@ export function Tasks() {
   const image_uri = user?.email === "inuoluwadunsimi1@gmail.com"
     ? "https://www.shutterstock.com/image-photo/confident-young-african-american-business-600nw-2418465349.jpg"
     : ""
-  const [isAvailable, setIsAvailable] = useState(false)
+  const [isAvailable, setIsAvailable] = useState(true)
 
   const taskTabs = useMemo(() => [
     {
@@ -101,8 +101,6 @@ const TaskList = ({
   status
 }: TaskListProps) => {
   const { tasks, isLoading } = useGetTasks({ status });
-
-  console.log("TaskList tasks:", tasks);
 
   if (isLoading) {
     return <Text>Loading...</Text>;
