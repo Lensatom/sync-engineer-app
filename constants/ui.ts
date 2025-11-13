@@ -24,5 +24,9 @@ export const statusColors: Record<string, { fg: string; bg: string }> = {
   available: {
     fg: "#138041",
     bg: "#03FF771F"
+  },
+  running: {
+    fg: "#138041",
+    bg: "#03FF771F"
   }
 }

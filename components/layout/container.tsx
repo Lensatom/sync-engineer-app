@@ -1,6 +1,7 @@
 import { PADDING_X } from '@/constants/theme';
 import React, { ComponentProps } from 'react';
-import { ScrollView, XStack, YStack } from 'tamagui';
+import { ScrollView as RNScrollView } from 'react-native';
+import { XStack, YStack } from 'tamagui';
 
 interface Props extends ComponentProps<typeof XStack> {
   children: React.ReactNode;
@@ -19,9 +20,10 @@ export function Container({
 }: Props) {
   const TagName = axis === 'y' ? YStack : XStack;
 
+  // use RN ScrollView to avoid platform/native event mapping issues
   const content = canScroll ? (
-    <ScrollView
-      contentContainerStyle={{ flex: 1 }}
+    <RNScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
@@ -29,29 +31,12 @@ export function Container({
       <TagName style={{ flex: 1 }} px={PADDING_X} bg={bg ?? "$white"} {...rest}>
         {children}
       </TagName>
-    </ScrollView>
+    </RNScrollView>
   ) : (
     <TagName style={{ flex: 1 }} px={PADDING_X} bg={bg ?? "$white"} {...rest}>
       {children}
     </TagName>
   );
 
-  return (
-    canScroll ? (
-      <ScrollView
-        contentContainerStyle={{ flex: 1 }}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <TagName style={{ flex: 1 }} px={PADDING_X} bg={bg ?? "$white"} {...rest}>
-          {children}
-        </TagName>
-      </ScrollView>
-    ) : (
-      <TagName style={{ flex: 1 }} px={PADDING_X} bg={bg ?? "$white"} {...rest}>
-        {children}
-      </TagName>
-    )
-  )
+  return content;
 }

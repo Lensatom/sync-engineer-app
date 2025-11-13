@@ -1,6 +1,6 @@
+import * as icons from "@/assets/icons"
 import { SvgProps } from "react-native-svg"
 import { View } from "tamagui"
-import * as icons from "@/assets/icons"
 
 export type IIcon = keyof typeof icons
 

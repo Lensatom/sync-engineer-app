@@ -5,7 +5,6 @@ import { PADDING_X, SCREEN_WIDTH } from '@/constants/theme'
 import React, { useMemo, useState } from 'react'
 import { XStack, YStack } from 'tamagui'
 import { TaskCard } from './components'
-import { TestPager } from './components/testPager'
 
 export function Tasks() {
   const image_uri = "https://www.shutterstock.com/image-photo/confident-young-african-american-business-600nw-2418465349.jpg"
@@ -83,9 +82,6 @@ export function Tasks() {
         </XStack>
 
         <Tab tabs={taskTabs} />
-
-        <TestPager />
-        <Text>HELLO</Text>
       </YStack>
     </Container>
   )
