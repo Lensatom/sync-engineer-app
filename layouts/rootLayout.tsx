@@ -1,32 +1,25 @@
+import config from '@/tamagui.config';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import React, { useEffect } from 'react';
-import 'react-native-reanimated';
-import '../utils/notifeeBackground'; // register Notifee background handlers
-
-import config from '@/tamagui.config';
 import { StatusBar } from 'react-native';
+import 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TamaguiProvider } from 'tamagui';
-
-import { disposePushFlow, initPushFlow } from '../utils/notifications';
+import '../utils/notifeeBackground';
+import { registerForPushNotificationsAsync, useNotificationListener } from '../utils/notifications';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 export function RootLayout() {
+
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      await initPushFlow();
-      if (!mounted) return;
-    })();
-    return () => {
-      mounted = false;
-      disposePushFlow();
-    };
+    registerForPushNotificationsAsync();
   }, []);
+
+  useNotificationListener();
 
   return (
     <TamaguiProvider config={config}>
