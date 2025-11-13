@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { View, XStack, YStack } from 'tamagui'
-import { useGetTaskById } from './api'
+import { useGetTaskById, useUpdateTaskStatus } from './api'
 
 export function TaskDetails() {
   const { id } = useLocalSearchParams()
@@ -24,6 +24,8 @@ export function TaskDetails() {
 
   const makeArray = (len: number) => Array.from({ length: len });
 
+  const { updateTaskStatus, isPending } = useUpdateTaskStatus({ id: id as string });
+
   const getLogLength = () => {
     const length = statusLog.length;
     if (lastStatus === "reassigned") {
@@ -31,6 +33,10 @@ export function TaskDetails() {
     } else {
       return [makeArray(3), (100 / 3) - 1];
     }
+  }
+
+  const changeStatus = (status: string) => {
+    updateTaskStatus({ status });
   }
 
   useEffect(() => {
@@ -101,15 +107,17 @@ export function TaskDetails() {
                 const pos = index + 1
                 const isLast = statusLog[index]?.status.toLowerCase() === lastStatus
                 return (
-                  statusLog[index] && (
-                    <YStack w={`${adaptedLog[1]}%`} ai={pos === 1 ? "flex-start" : pos === adaptedLog[0].length ? "flex-end" : "center"}>
-                      <XStack h="$2" w="$full" bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"} br="$full" ai="center" jc={pos === 1 ? "flex-start" : pos === adaptedLog[0].length ? "flex-end" : "center"} overflow='visible'>
-                        <View w="$4" h="$4" borderWidth={3} bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"} borderColor="$white" br="$full" elevationAndroid={2}></View>
-                      </XStack>
-                      <Text fos={11} fow="600" mt="$3" color="$gray12" tt="capitalize">{statusLog[index]?.status.toLowerCase()}</Text>
-                      <Text fos={9} color="$gray12" mt="$1">{formatDate(statusLog[index]?.time)}</Text>
+                  <YStack w={`${adaptedLog[1]}%`} ai={pos === 1 ? "flex-start" : pos === adaptedLog[0].length ? "flex-end" : "center"}>
+                      {statusLog[index] && (
+                        <>
+                          <XStack h="$2" w="$full" bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"} br="$full" ai="center" jc={pos === 1 ? "flex-start" : pos === adaptedLog[0].length ? "flex-end" : "center"} overflow='visible'>
+                            <View w="$4" h="$4" borderWidth={3} bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"} borderColor="$white" br="$full" elevationAndroid={2}></View>
+                          </XStack>
+                          <Text fos={11} fow="600" mt="$3" color="$gray12" tt="capitalize">{statusLog[index]?.status.toLowerCase()}</Text>
+                          <Text fos={9} color="$gray12" mt="$1">{formatDate(statusLog[index]?.time)}</Text>
+                        </>
+                      )}
                     </YStack>
-                  )
                 )
               })}
             </XStack>
@@ -128,19 +136,19 @@ export function TaskDetails() {
               <XStack mt={55} jc="space-between">
                 {lastStatus === "inprogress" ? (
                   <>
-                    <Button w="49%" pill type="outlineGray">
+                    <Button isLoading={isPending} w="49%" pill type="outlineGray" onPress={() => changeStatus('UNRESOLVED')}>
                       <Text fow="600">Set as Unresolved</Text>
                     </Button>
-                    <Button w="49%" pill type="dark">
+                    <Button isLoading={isPending} w="49%" pill type="dark" onPress={() => changeStatus('RESOLVED')}>
                       <Text fow="600" color="$white">Set as Resolved</Text>
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button w="49%" pill type="outlineGray">
+                    <Button isLoading={isPending} w="49%" pill type="outlineGray">
                       <Text fow="600">View Route</Text>
                     </Button>
-                    <Button w="49%" pill type="dark">
+                    <Button isLoading={isPending} w="49%" pill type="dark" onPress={() => changeStatus('INPROGRESS')}>
                       <Text fow="600" color="$white">Start Repair</Text>
                     </Button>
                   </>

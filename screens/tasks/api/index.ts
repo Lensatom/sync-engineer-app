@@ -1,5 +1,6 @@
-import { GET } from "@/config/axios";
-import { useQuery } from "@tanstack/react-query";
+import { GET, PATCH } from "@/config/axios";
+import { queryClient } from "@/config/tanstack";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetTasks = ({ status } : { status: 'ACTIVE' | 'ASSIGNED' | 'RESOLVED' | 'UNRESOLVED' | 'REASSIGNED' }) => {
   const { data: tasks, ...rest } = useQuery({
@@ -31,4 +32,24 @@ export const useGetTaskById = ({ id } : { id: string }) => {
   console.log("useGetTaskById task:", task);
 
   return { task, ...rest };
+};
+
+export const useUpdateTaskStatus = ({
+  id
+}: { id: string }) => {
+  const { mutateAsync:updateTaskStatus, ...rest } = useMutation({
+    mutationKey: ["tasks", id],
+    mutationFn: async ({status}: {status: string}) => {
+      await PATCH({
+        route: `/tasks/${id}/status`,
+        data: { status },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks', id] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    }
+  });
+
+  return { updateTaskStatus, ...rest };
 };
