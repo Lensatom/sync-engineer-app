@@ -82,6 +82,17 @@ const BaseButton = styled(TMButton, {
           opacity: 0.8
         }
       },
+      dark: {
+        bg: "$black",
+        borderColor: "$colorTransparent",
+        color: "$white",
+        width: "auto",
+        pressStyle: {
+          bg: "$black",
+          borderColor: "$colorTransparent",
+          opacity: 0.8
+        }
+      },
       ghost: {
         bg: "$colorTransparent",
         borderColor: "$colorTransparent",
