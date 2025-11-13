@@ -1,6 +1,6 @@
 import config from '@/tamagui.config';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Slot } from 'expo-router';
+import { Stack } from 'expo-router';
 import React, { useEffect } from 'react';
 import 'react-native-reanimated';
 import { TamaguiProvider } from 'tamagui';
@@ -22,7 +22,7 @@ export function RootLayout() {
   return (
     <TamaguiProvider config={config}>
       <ThemeProvider value={DefaultTheme}>
-        <Slot />
+        <Stack screenOptions={{ headerShown: false, statusBarStyle: 'dark' }} />
       </ThemeProvider>
     </TamaguiProvider>
   );

@@ -5,6 +5,16 @@ import { StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function TabLayout() {
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (Platform.OS === 'android') {
+  //       StatusBar.setBackgroundColor('white', true);
+  //     }
+  //     StatusBar.setBarStyle('dark-content', true);
+  //     return undefined;
+  //   }, [])
+  // );
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: 'white' }}

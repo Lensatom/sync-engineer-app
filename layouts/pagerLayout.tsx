@@ -10,7 +10,7 @@ export function PagerLayout() {
       edges={['top', 'left', 'right']}
     >
       <StatusBar barStyle="light-content" />
-      <Stack screenOptions={{ headerShown: false, statusBarStyle: 'light' }} />
+      <Stack screenOptions={{ headerShown: false, }} />
     </SafeAreaView>
   )
 }

@@ -20,7 +20,6 @@ export function Container({
 }: Props) {
   const TagName = axis === 'y' ? YStack : XStack;
 
-  // use RN ScrollView to avoid platform/native event mapping issues
   const content = canScroll ? (
     <RNScrollView
       contentContainerStyle={{ flexGrow: 1 }}
