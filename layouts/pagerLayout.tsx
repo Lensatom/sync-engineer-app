@@ -3,14 +3,14 @@ import React from 'react'
 import { StatusBar } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-export function StackLayout() {
+export function PagerLayout() {
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: 'white' }}
+      style={{ flex: 1, backgroundColor: 'red' }}
       edges={['top', 'left', 'right']}
     >
-      <StatusBar barStyle="dark-content" />
-      <Stack screenOptions={{ headerShown: false, statusBarStyle: 'dark' }} />
+      <StatusBar barStyle="light-content" />
+      <Stack screenOptions={{ headerShown: false, statusBarStyle: 'light' }} />
     </SafeAreaView>
   )
 }
