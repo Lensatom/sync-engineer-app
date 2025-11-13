@@ -9,11 +9,19 @@ export const statusColors: Record<string, { fg: string; bg: string }> = {
     fg: "#FF9500",
     bg: "#FFDD3326"
   },
+  assigned: {
+    fg: "#FF9500",
+    bg: "#FFDD3326"
+  },
   critical: {
     fg: "#F18401",
     bg: "#F184011F"
   },
   degraded: {
+    fg: "#FF0000",
+    bg: "#FF000014"
+  },
+  unresolved: {
     fg: "#FF0000",
     bg: "#FF000014"
   },
@@ -28,5 +36,13 @@ export const statusColors: Record<string, { fg: string; bg: string }> = {
   running: {
     fg: "#138041",
     bg: "#03FF771F"
+  },
+  fixed: {
+    fg: "#138041",
+    bg: "#03FF771F"
+  },
+  reassigned: {
+    fg: "#FF19FF",
+    bg: "#FF19FF1F"
   }
 }

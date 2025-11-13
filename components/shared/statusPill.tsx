@@ -17,8 +17,8 @@ export function StatusPill({
     <Text
       fos={11}
       fow="500"
-      color={statusColor.fg}
-      bg={statusColor.bg}
+      color={statusColor?.fg}
+      bg={statusColor?.bg}
       br="$full"
       tt="capitalize"
       py={1}

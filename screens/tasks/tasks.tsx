@@ -4,7 +4,9 @@ import { Avatar, Button, HorizontalLine, Icon, Text, Toggle } from '@/components
 import { PADDING_X, SCREEN_WIDTH } from '@/constants/theme'
 import { useUser } from '@/layouts/rootLayout'
 import React, { useMemo, useState } from 'react'
-import { XStack, YStack } from 'tamagui'
+import { FlatList } from 'react-native'
+import { View, XStack, YStack } from 'tamagui'
+import { useGetTasks } from './api'
 import { TaskCard } from './components'
 
 export function Tasks() {
@@ -18,27 +20,27 @@ export function Tasks() {
     {
       title: "Active",
       name: "active",
-      content: <TaskCard details="" />
+      content: <TaskList status="ACTIVE" />
     },
     {
       title: "Assigned",
       name: "assigned",
-      content: <Text>Assigned Tasks</Text>
+      content: <TaskList status="ASSIGNED" />
     },
     {
       title: "Resolved",
       name: "resolved",
-      content: <Text>Resolved Tasks</Text>
+      content: <TaskList status="RESOLVED" />
     },
     {
       title: "Unresolved",
       name: "unresolved",
-      content: <Text>Unresolved Tasks</Text>
+      content: <TaskList status="UNRESOLVED" />
     }
   ], [])
 
   return (
-    <Container main>
+    <Container main canScroll={false} flex={1}>
       <XStack ai="center">
         <Avatar uri={image_uri} size={48} />
         <YStack ml={12}>
@@ -88,5 +90,36 @@ export function Tasks() {
         <Tab tabs={taskTabs} />
       </YStack>
     </Container>
+  )
+}
+
+interface TaskListProps {
+  status: 'ACTIVE' | 'ASSIGNED' | 'RESOLVED' | 'UNRESOLVED' | 'REASSIGNED';
+}
+
+const TaskList = ({
+  status
+}: TaskListProps) => {
+  const { tasks, isLoading } = useGetTasks({ status });
+
+  console.log("TaskList tasks:", tasks);
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  return (
+    <YStack>
+      <FlatList
+        data={tasks || []}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <TaskCard details={item} />}
+        ListEmptyComponent={() => (
+          <Text>No tasks available</Text>
+        )}
+        ItemSeparatorComponent={() => <View h={12} />}
+        ListFooterComponent={() => <View h={600} />}
+      />
+    </YStack>
   )
 }
