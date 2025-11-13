@@ -1,6 +1,6 @@
 import { Container, Header } from '@/components/layout'
 import { StatusPill } from '@/components/shared'
-import { Button, HorizontalLine, Icon, Text } from '@/components/ui'
+import { HorizontalLine, Icon, Text } from '@/components/ui'
 import { statusColors } from '@/constants/ui'
 import React from 'react'
 import { Image } from 'react-native'
@@ -9,6 +9,8 @@ import { View, XStack, YStack } from 'tamagui'
 const ATM_Image = require('@/assets/images/atm-machine.png');
 
 export function TaskDetails() {
+  const statusLength = 4;
+
   return (
     <>
       <Header
@@ -22,7 +24,7 @@ export function TaskDetails() {
 
       <Container main pt="$3">
         <XStack ai="center">
-          <View bg="$gray2" w={50} h={50} jc="center" ai="center" overflow='visible' borderWidth={3} borderColor="$gray3" br="$full" ai="center" jc="center">
+          <View bg="$gray2" w={50} h={50} jc="center" ai="center" overflow='visible' borderWidth={3} borderColor="$gray3" br="$full">
             <AnimatedCircularProgress
               size={54}
               width={4}
@@ -60,36 +62,51 @@ export function TaskDetails() {
             </XStack>
             
             <XStack jc="space-between" pos="absolute" top={0} w="$full">
-              <YStack w="32%" ai="flex-start">
+              <YStack w={`${(100 / statusLength) - 1}%`} ai="flex-start">
                 <XStack h="$2" w="$full" bg="#FFC619" br="$full" ai="center" jc="flex-start" overflow='visible'>
                   <View w="$4" h="$4" borderWidth={3} bg="#FFC619" borderColor="$white" br="$full" elevationAndroid={2}></View>
                 </XStack>
                 <Text fos={11} fow="600" mt="$3" color="$gray12">Assigned</Text>
-                <Text fos={10} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
+                <Text fos={9} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
               </YStack>
-              <YStack w="32%" ai="center">
-                <XStack h="$2" w="$full" bg="#FFC619" br="$full" ai="center" jc="center" overflow='visible'>
-                  <View w="$4" h="$4" borderWidth={3} bg="#FFC619" borderColor="$white" br="$full" elevationAndroid={2}></View>
-                </XStack>
-                <Text fos={11} fow="600" mt="$3" color="$gray12">In-Repair</Text>
-                <Text fos={10} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
-              </YStack>
-              <YStack w="32%" ai="flex-end">
+              {statusLength >= 3 && (
+                <YStack w={`${(100 / statusLength) - 1}%`} ai="center">
+                  <XStack h="$2" w="$full" bg="#FFC619" br="$full" ai="center" jc="center" overflow='visible'>
+                    <View w="$4" h="$4" borderWidth={3} bg="#FFC619" borderColor="$white" br="$full" elevationAndroid={2}></View>
+                  </XStack>
+                  <Text fos={11} fow="600" mt="$3" color="$gray12">In-Repair</Text>
+                  <Text fos={9} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
+                </YStack>
+              )}
+              {statusLength === 4 && (
+                <YStack w={`${(100 / statusLength) - 1}%`} ai="center">
+                  <XStack h="$2" w="$full" bg="#FFC619" br="$full" ai="center" jc="center" overflow='visible'>
+                    <View w="$4" h="$4" borderWidth={3} bg="#FFC619" borderColor="$white" br="$full" elevationAndroid={2}></View>
+                  </XStack>
+                  <Text fos={11} fow="600" mt="$3" color="$gray12">In-Repair</Text>
+                  <Text fos={9} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
+                </YStack>
+              )}
+              <YStack w={`${(100 / statusLength) - 1}%`} ai="flex-end">
                 <XStack h="$2" w="$full" bg="$success" br="$full" ai="center" jc="flex-end" overflow='visible'>
                   <View w="$4" h="$4" borderWidth={3} bg="$success" borderColor="$white" br="$full" elevationAndroid={2}></View>
                 </XStack>
                 <Text fos={11} fow="600" mt="$3" color="$gray12">Resolved</Text>
-                <Text fos={10} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
+                <Text fos={9} color="$gray12" mt="$1">11:23AM, Sep 23</Text>
               </YStack>
             </XStack>
 
-            <XStack mt={69} jc="space-between">
+            {/* <XStack mt={69} jc="space-between">
               <Button w="49%" pill type="outlineGray">
                 <Text fow="600">View Route</Text>
               </Button>
               <Button w="49%" pill type="dark">
                 <Text fow="600" color="$white">Start Repair</Text>
               </Button>
+            </XStack> */}
+            <XStack mt={69} py="$2" px="$3" borderWidth={1} borderColor="$gray3" br="$2">
+              <Icon name="info" size={20} padding={0} />
+              <Text fos={11} pl="$2" lh={17}>Your task has been reassigned blah b blah blah blah bhsbd dddvhdaccount above will be reflected.</Text>
             </XStack>
           </YStack>
         </YStack>

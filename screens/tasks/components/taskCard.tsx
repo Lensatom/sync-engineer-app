@@ -22,7 +22,7 @@ export function TaskCard({
       onPress={() => router.push("/tasks/123")}
     >
       <XStack ai="center" p={"$3"}>
-        <View bg="$gray2" w={50} h={50} jc="center" ai="center" overflow='visible' borderWidth={3} borderColor="$gray3" br="$full" ai="center" jc="center">
+        <View bg="$gray2" w={50} h={50} jc="center" ai="center" overflow='visible' borderWidth={3} borderColor="$gray3" br="$full">
           <AnimatedCircularProgress
             size={54}
             width={4}
