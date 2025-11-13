@@ -8,10 +8,12 @@ import { XStack, YStack } from 'tamagui'
 import { TaskCard } from './components'
 
 export function Tasks() {
-  const image_uri = "https://www.shutterstock.com/image-photo/confident-young-african-american-business-600nw-2418465349.jpg"
+  const { user } = useUser();
+  const image_uri = user.email === "inuoluwadunsimi1@gmail.com"
+    ? "https://jhu.edu.ng/wp-content/uploads/2023/11/Jim-Ovia-CON_.jpg"
+    : ""
   const [isAvailable, setIsAvailable] = useState(false)
 
-  const { user } = useUser();
 
   console.log(user)
 
@@ -43,7 +45,7 @@ export function Tasks() {
       <XStack ai="center">
         <Avatar uri={image_uri} size={48} />
         <YStack ml={12}>
-          <Text type="h1">Hi {user?.email}</Text>
+          <Text type="h1" tt="capitalize">Hi, {user?.firstName} {user?.lastName}</Text>
           <Text type="sub1">do xyz to increase your Efficiency score</Text>
         </YStack>
       </XStack>
