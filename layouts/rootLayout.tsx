@@ -1,4 +1,4 @@
-import { useRetrieveUser } from '@/api/auth';
+import { useRetrieveUser, useUpdateNotifToken } from '@/api/auth';
 import { queryClient } from '@/config/tanstack';
 import config from '@/tamagui.config';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
@@ -71,11 +71,25 @@ export function RootLayout() {
 }
 
 function RootContent() {
+  const { updateNotifToken } = useUpdateNotifToken();
+  
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
 
   useNotificationListener();
+
+  useEffect(() => {
+    async function sendTokenToServer(expoToken: string) {
+      await updateNotifToken({ expoToken });
+    }
+
+    registerForPushNotificationsAsync().then(token => {
+      if (token) {
+        sendTokenToServer(token);
+      }
+    });
+  }, [updateNotifToken]);
 
   const { isLoading } = useUser();
 

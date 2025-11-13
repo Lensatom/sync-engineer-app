@@ -17,6 +17,13 @@ export type IPUT = {
   isFormData?: boolean;
 }
 
+export type IPATCH = {
+  route: string;
+  data: any;
+  authorization?: boolean;
+  isFormData?: boolean;
+}
+
 export type IDELETE = {
   route: string;
   data: any;

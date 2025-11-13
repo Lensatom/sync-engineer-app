@@ -1,4 +1,4 @@
-import { GET, POST } from "@/config/axios";
+import { GET, PATCH, POST } from "@/config/axios";
 import { setAccessToken } from "@/helpers/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -31,4 +31,19 @@ export const useRetrieveUser = () => {
   console.log("useRetrieveUser user:", user);
 
   return { user, ...rest };
+};
+
+export const useUpdateNotifToken = () => {
+  const { mutateAsync:updateNotifToken, ...rest } = useMutation({
+    mutationKey: ["notification"],
+    mutationFn: async ({expoToken}: {expoToken: string}) => {
+      const response = await PATCH({
+        route: "/user/token",
+        data: { expoToken },
+      });
+      setAccessToken(response.data.token)
+    }
+  });
+
+  return { updateNotifToken, ...rest };
 };

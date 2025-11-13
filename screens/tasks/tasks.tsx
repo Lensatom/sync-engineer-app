@@ -9,13 +9,10 @@ import { TaskCard } from './components'
 
 export function Tasks() {
   const { user } = useUser();
-  const image_uri = user.email === "inuoluwadunsimi1@gmail.com"
-    ? "https://jhu.edu.ng/wp-content/uploads/2023/11/Jim-Ovia-CON_.jpg"
+  const image_uri = user?.email === "inuoluwadunsimi1@gmail.com"
+    ? "https://www.shutterstock.com/image-photo/confident-young-african-american-business-600nw-2418465349.jpg"
     : ""
   const [isAvailable, setIsAvailable] = useState(false)
-
-
-  console.log(user)
 
   const taskTabs = useMemo(() => [
     {

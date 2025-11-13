@@ -1,7 +1,7 @@
 import { SERVER_BASE_URL } from '@/constants/api';
 import { getAccessToken } from '@/helpers/api';
 import axios, { AxiosError } from 'axios';
-import { IDELETE, IGET, IPOST, IPUT } from './type';
+import { IDELETE, IGET, IPATCH, IPOST, IPUT } from './type';
 
 type ApiRes<DataType = null> = {
   token(token: any): unknown;
@@ -95,6 +95,22 @@ export const PUT = async ({
 }:IPUT) => {
   const eject = tokenInterceptor();
   const response = await api.put(
+    route,
+    data,
+    {headers: {"Content-Type": isFormData ? "multipart/form-data" : "application/json"}}
+  );
+  if (authorization) eject();
+  return response.data;
+}
+
+export const PATCH = async ({
+  route,
+  data,
+  authorization=true,
+  isFormData=false
+}:IPATCH) => {
+  const eject = tokenInterceptor();
+  const response = await api.patch(
     route,
     data,
     {headers: {"Content-Type": isFormData ? "multipart/form-data" : "application/json"}}
