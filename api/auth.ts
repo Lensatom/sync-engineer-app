@@ -28,5 +28,7 @@ export const useRetrieveUser = () => {
     }
   });
 
+  console.log("useRetrieveUser user:", user);
+
   return { user, ...rest };
 };

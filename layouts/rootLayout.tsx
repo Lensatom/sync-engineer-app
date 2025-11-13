@@ -34,7 +34,6 @@ export function useUser() {
 function UserProvider({ children }: { children: React.ReactNode }) {
   const { user: fetchedUser, isLoading, refetch } = useRetrieveUser();
   const [user, setUser] = useState<any>(fetchedUser);
-  useEffect(() => { setUser(fetchedUser); }, [fetchedUser]);
 
   const refresh = useCallback(() => { refetch(); }, [refetch]);
   const signOut = useCallback(async () => {
@@ -42,6 +41,13 @@ function UserProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     router.replace('/login');
   }, []);
+
+  useEffect(() => {
+    if (!isLoading && !fetchedUser) {
+      router.replace('/login');
+    }
+    setUser(fetchedUser);
+  }, [fetchedUser, isLoading]);
 
   return (
     <UserContext.Provider value={{ user, isLoading, refresh, signOut, setUser }}>
@@ -71,13 +77,7 @@ function RootContent() {
 
   useNotificationListener();
 
-  const { user, isLoading } = useUser();
-
-  useEffect(() => {
-    if (!isLoading && user) {
-      router.replace('/login');
-    }
-  }, [user, isLoading]);
+  const { isLoading } = useUser();
 
   return isLoading ? (
     <View flex={1} jc="center" ai="center" bg="white">

@@ -2,6 +2,7 @@ import { Container, Tab } from '@/components/layout'
 import { StatusPill } from '@/components/shared'
 import { Avatar, Button, HorizontalLine, Icon, Text, Toggle } from '@/components/ui'
 import { PADDING_X, SCREEN_WIDTH } from '@/constants/theme'
+import { useUser } from '@/layouts/rootLayout'
 import React, { useMemo, useState } from 'react'
 import { XStack, YStack } from 'tamagui'
 import { TaskCard } from './components'
@@ -9,6 +10,10 @@ import { TaskCard } from './components'
 export function Tasks() {
   const image_uri = "https://www.shutterstock.com/image-photo/confident-young-african-american-business-600nw-2418465349.jpg"
   const [isAvailable, setIsAvailable] = useState(false)
+
+  const { user } = useUser();
+
+  console.log(user)
 
   const taskTabs = useMemo(() => [
     {
@@ -38,7 +43,7 @@ export function Tasks() {
       <XStack ai="center">
         <Avatar uri={image_uri} size={48} />
         <YStack ml={12}>
-          <Text type="h1">Hi Desire</Text>
+          <Text type="h1">Hi {user?.email}</Text>
           <Text type="sub1">do xyz to increase your Efficiency score</Text>
         </YStack>
       </XStack>
