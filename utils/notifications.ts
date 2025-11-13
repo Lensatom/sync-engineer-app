@@ -15,7 +15,6 @@ Notifications.setNotificationHandler({
   }),
 });
 
-// Ensure Android channel early (idempotent)
 let channelsReady = false;
 async function ensureChannels() {
   if (channelsReady) return;
@@ -26,7 +25,7 @@ async function ensureChannels() {
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#FF231F7C',
       sound: 'default',
-      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC, // added
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
     });
     await Notifications.setNotificationChannelAsync('alert', {
       name: 'Alert',
@@ -34,7 +33,7 @@ async function ensureChannels() {
       vibrationPattern: [0, 300, 300, 300],
       lightColor: '#FF0000',
       sound: 'default',
-      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC, // added
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
     });
   }
   channelsReady = true;
@@ -58,7 +57,7 @@ export async function registerForPushNotificationsAsync() {
   }
 
   await ensureChannels();
-  activateForegroundListeners(); // ADDED: ensure foreground listeners active
+  activateForegroundListeners();
 
   const projectId =
     (Constants?.expoConfig as any)?.extra?.eas?.projectId ??
@@ -70,13 +69,11 @@ export async function registerForPushNotificationsAsync() {
   return token;
 }
 
-// Helper to safely parse nested notification JSON string
 function parseMaybeJson(value: any) {
   if (typeof value !== 'string') return value;
   try { return JSON.parse(value); } catch { return {}; }
 }
 
-// Foreground listener activation (single registration)
 let foregroundListenersActive = false;
 function activateForegroundListeners() {
   if (foregroundListenersActive) return;
@@ -88,7 +85,7 @@ function activateForegroundListeners() {
     if (navigating) return;
     navigating = true;
     try { router.push('/pager'); } catch (e) { console.warn('[push] navigation error:', e); }
-    setTimeout(() => { navigating = false; }, 1500);
+    setTimeout(() => { navigating = false; }, 1200);
   }
 
   const received = Notifications.addNotificationReceivedListener(async notification => {
@@ -99,8 +96,6 @@ function activateForegroundListeners() {
     const body = content.body || nested.body || '';
     const alreadyMirrored = !!(content.data as any)?.__local_mirror;
 
-    // Mirror only if:
-    // iOS (system suppresses foreground) OR Android data-only (no title/body)
     const isDataOnlyAndroid = Platform.OS === 'android' && !title && !body;
     const needsMirror = Platform.OS === 'ios' || isDataOnlyAndroid;
 
@@ -113,7 +108,6 @@ function activateForegroundListeners() {
             body: body || '',
             data: { ...content.data, __local_mirror: true },
             sound: 'default',
-            channelId: 'alert',
           },
           trigger: null,
         });
@@ -125,7 +119,6 @@ function activateForegroundListeners() {
       console.log('[push] foreground notification (no mirror needed)');
     }
 
-    // Route only on the first (non-mirrored) foreground arrival
     if (!alreadyMirrored) navigateToPagerOnce();
   });
 
@@ -134,10 +127,19 @@ function activateForegroundListeners() {
     navigateToPagerOnce();
   });
 
-  // store disposers (optional if needed later)
+  try {
+    const messaging = require('@react-native-firebase/messaging')?.default;
+    if (typeof messaging === 'function') {
+      messaging().onMessage(async (remoteMessage: any) => {
+        console.log('[push] firebase onMessage (foreground) received:', remoteMessage?.messageId || '');
+        navigateToPagerOnce();
+      });
+    }
+  } catch {
+    // RNFirebase not installed — ignore
+  }
 }
 
-// Convenience single-call initializer
 export async function initializeNotificationsFlow() {
   const token = await registerForPushNotificationsAsync();
   if (!token) {
@@ -148,7 +150,6 @@ export async function initializeNotificationsFlow() {
   return token;
 }
 
-// Optional: quick local test helper you can call to verify channel heads-up on Android
 export async function triggerLocalTest(title = 'Test', body = 'Local notification test') {
   await ensureChannels();
   await Notifications.scheduleNotificationAsync({
@@ -156,17 +157,17 @@ export async function triggerLocalTest(title = 'Test', body = 'Local notificatio
       title,
       body,
       sound: 'default',
-      data: { test: true },
-      channelId: 'alert',
+      data: { test: true }
     },
     trigger: null,
   });
   console.log('[push] local test notification scheduled');
 }
 
-// Keep hook (now just ensures activation)
 export function useNotificationListener() {
   useEffect(() => {
     activateForegroundListeners();
   }, []);
 }
+
+try { activateForegroundListeners(); } catch {}
