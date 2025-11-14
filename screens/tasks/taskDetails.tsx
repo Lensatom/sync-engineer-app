@@ -4,7 +4,7 @@ import { StatusPill } from '@/components/shared'
 import { Button, HorizontalLine, Icon, Text } from '@/components/ui'
 import { completeStatus } from '@/constants/shared'
 import { statusColors } from '@/constants/ui'
-import { formatDate } from '@/helpers/utils'
+import { formatDate, openRouteTo } from '@/helpers/utils'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator } from 'react-native'
@@ -16,6 +16,8 @@ export function TaskDetails() {
   const { id } = useLocalSearchParams()
 
   const { task, isLoading } = useGetTaskById({ id: id as string });
+
+  const location = "No 23 Awolowo street, Lekki Phase 1, Lagos";
 
   const lastStatus = task?.statusDetails?.at(-1)?.status.toLowerCase();
   const percentComplete = completeStatus.includes(lastStatus ?? "") ? 100 : 100 / (4 - (task?.statusDetails.length ?? 0))
@@ -82,13 +84,13 @@ export function TaskDetails() {
             </AnimatedCircularProgress>
           </View>
           <YStack ml="$2" gap="$0.5" flex={1}>
-            <Text fos={10} color="$gray12">ZENITH BANK ATM #978</Text>
+            <Text fos={10} color="$gray12" tt="uppercase">ZENITH BANK ATM #{task?.id?.split("-")[1]}</Text>
             <XStack>
               <Text fos={12} fow="500" tt="capitalize">{task?.taskTitle}</Text>
               <StatusPill status={lastStatus} ml="$1.5" />
             </XStack>
             <XStack ai="center">
-              <Text fos={10} color="$gray12" mr="$1">No 23 Awolowo street, Lekki Phase 1, Lagos</Text>
+              <Text fos={10} color="$gray12" mr="$1">{location}</Text>
               <Icon name="location" size={14} padding={0} />
             </XStack>
           </YStack>
@@ -145,7 +147,7 @@ export function TaskDetails() {
                   </>
                 ) : (
                   <>
-                    <Button isLoading={isPending} w="49%" pill type="outlineGray">
+                    <Button isLoading={isPending} w="49%" pill type="outlineGray" onPress={() => openRouteTo(location)}>
                       <Text fow="600">View Route</Text>
                     </Button>
                     <Button isLoading={isPending} w="49%" pill type="dark" onPress={() => changeStatus('INPROGRESS')}>

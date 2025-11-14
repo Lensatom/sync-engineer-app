@@ -1,3 +1,5 @@
+import { Linking, Platform } from "react-native";
+
 export const formatDate = (
   input: string | number | Date,
   overrides?: Intl.DateTimeFormatOptions,
@@ -34,3 +36,22 @@ export const formatDate = (
 
   return `${timeStr}, ${dateStr}`;
 };
+
+export async function openRouteTo(address: string) {
+  const query = encodeURIComponent(address);
+  try {
+    if (Platform.OS === 'android') {
+      const gnav = `google.navigation:q=${query}`; // Google Maps turn-by-turn
+      if (await Linking.canOpenURL(gnav)) return Linking.openURL(gnav);
+      const geo = `geo:0,0?q=${query}`; // geo fallback
+      if (await Linking.canOpenURL(geo)) return Linking.openURL(geo);
+      return Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${query}`); // web fallback
+    } else {
+      const gmaps = `comgooglemaps://?daddr=${query}&directionsmode=driving`;
+      if (await Linking.canOpenURL(gmaps)) return Linking.openURL(gmaps);
+      return Linking.openURL(`http://maps.apple.com/?daddr=${query}`); // Apple Maps fallback
+    }
+  } catch (e) {
+    console.warn('[maps] openRouteTo error', e);
+  }
+}

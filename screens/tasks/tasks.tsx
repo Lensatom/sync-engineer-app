@@ -71,7 +71,7 @@ export function Tasks() {
               <Icon name="location" size={16} padding={0} />
               <Text fos={14} fow="500" ml="$1" mr="$2">Your location</Text>
             </XStack>
-            <Text fos={11} color="$gray11" mt="$1.5">No 67 Aremo Somolu street, Itire-Ijesha, Lagos</Text>
+            <Text fos={11} color="$gray11" mt="$1.5">No 67 Moshood Olugbani, Victoria Island, Lagos</Text>
           </YStack>
           <Icon name="arrow_head_right" size={13} />
         </XStack>
