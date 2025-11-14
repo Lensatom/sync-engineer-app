@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 export function PagerLayout() {
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: 'red' }}
+      style={{ flex: 1, backgroundColor: '#6C1313' }}
       edges={['top', 'left', 'right']}
     >
       <StatusBar barStyle="light-content" />

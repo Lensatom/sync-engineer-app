@@ -81,10 +81,10 @@ function activateForegroundListeners() {
   console.log('[push] activating foreground listeners');
 
   let navigating = false;
-  function navigateToPagerOnce() {
+  function navigateToPagerOnce(id?: string, title?: string) {
     if (navigating) return;
     navigating = true;
-    try { router.push('/pager'); } catch (e) { console.warn('[push] navigation error:', e); }
+    try { router.push({pathname: '/pager', params: { id, title }}); } catch (e) { console.warn('[push] navigation error:', e); }
     setTimeout(() => { navigating = false; }, 1200);
   }
 
@@ -132,7 +132,9 @@ function activateForegroundListeners() {
     if (typeof messaging === 'function') {
       messaging().onMessage(async (remoteMessage: any) => {
         console.log('[push] firebase onMessage (foreground) received:', remoteMessage?.messageId || '');
-        navigateToPagerOnce();
+        const { taskId, taskTitle } = JSON.parse(remoteMessage.data?.body)
+        console.log('[push] navigating to pager with taskId:', taskId, 'taskTitle:', taskTitle);
+        navigateToPagerOnce(taskId, taskTitle);
       });
     }
   } catch {

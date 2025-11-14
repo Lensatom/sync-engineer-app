@@ -41,7 +41,7 @@ function tokenInterceptor() {
   const interceptor = api.interceptors.request.use(
     async (config) => {
       const token = await getAccessToken();
-      console.log('token:', token);
+      // console.log('token:', token);
       if (token) {
         config.headers['x-auth-token'] = `${token}`;
       }

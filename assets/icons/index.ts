@@ -1,3 +1,4 @@
+export { default as alert_atm } from "./alert_atm.svg"
 export { default as arrow_head_left } from "./arrow_head_left.svg"
 export { default as arrow_head_right } from "./arrow_head_right.svg"
 export { default as brain_purple } from "./brain_purple.svg"
