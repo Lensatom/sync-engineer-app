@@ -1,1 +1,1 @@
-export const completeStatus = ["unresolved", "reassigned", "fixed"];
+export const completeStatus = ["unresolved", "reassigned", "fixed", "resolved"];

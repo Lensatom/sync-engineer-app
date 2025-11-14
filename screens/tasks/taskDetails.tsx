@@ -28,7 +28,7 @@ export function TaskDetails() {
 
   const getLogLength = () => {
     const length = statusLog.length;
-    if (lastStatus === "reassigned") {
+    if (completeStatus.includes(lastStatus)) {
       return [makeArray(length), (100 / length) - 1];
     } else {
       return [makeArray(3), (100 / 3) - 1];
@@ -127,7 +127,7 @@ export function TaskDetails() {
                 <Icon name="info" size={20} padding={0} />
                 <Text fos={11} pl="$2" pr="$10" lh={17}>This task has been reassigned to another engineer. Kindly stop all actions related to this task on the ATM</Text>
               </XStack>
-            ) : lastStatus === "fixed" ? (
+            ) : lastStatus === "fixed" || lastStatus === "resolved" ? (
               <XStack mt={55} ai="center" py="$2" px="$3" borderWidth={1} borderColor="$gray3" br="$2">
                 <Icon name="info" size={20} padding={0} />
                 <Text fos={11} pl="$2" pr="$10" lh={17}>Thank you for fixing this issue</Text>
