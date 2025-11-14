@@ -5,7 +5,7 @@ import { Button, HorizontalLine, Icon, Text } from '@/components/ui'
 import { completeStatus } from '@/constants/shared'
 import { statusColors } from '@/constants/ui'
 import { formatDate, openRouteTo } from '@/helpers/utils'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
@@ -202,11 +202,11 @@ export function TaskDetails() {
           </XStack>
 
           <XStack mt="$3" jc="space-between">
-            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2">
+            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2" onPress={() => router.push(`/tasks/${id}/diagnosis-report`)}>
               <Icon name="brain_purple" size={24} padding={0} />
               <Text fow="500" mt="$12" color="$gray12">AI Diagnosis Report</Text>
             </YStack>
-            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2">
+            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2" onPress={() => router.push(`/tasks/${id}/issue-history`)}>
               <Icon name="clock_blue" size={24} padding={0} />
               <Text fow="500" mt="$12" color="$gray12">Issue and Fix History </Text>
             </YStack>

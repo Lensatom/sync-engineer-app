@@ -53,3 +53,19 @@ export const useUpdateTaskStatus = ({
 
   return { updateTaskStatus, ...rest };
 };
+
+export const useGetDiagnosisReport = ({ id } : { id: string }) => {
+  const { data: report, ...rest } = useQuery({
+    queryKey: ["tasks", id, "diagnostic-report"],
+    queryFn: async () => {
+      const response = await GET({
+        route: `/tasks/${id}/diagnostic-report`
+      });
+      return response.data;
+    }
+  });
+
+  console.log("useGetDiagnosisReport report:", report);
+
+  return { report, ...rest };
+};
