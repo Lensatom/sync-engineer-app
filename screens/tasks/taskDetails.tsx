@@ -170,29 +170,29 @@ export function TaskDetails() {
                   <Icon name="health" size={12} padding={0} />
                   <Text fos={12} ml="$1" color="$gray12">ATM Health</Text>
                 </XStack>
-                <StatusPill status="running" mt="$1.5" />
+                <StatusPill status={task.atm?.healthStatus} mt="$1.5" />
               </YStack>
               <HorizontalLine />
               <YStack p="$3">
                 <XStack ai="center">
                   <Icon name="network" size={12} padding={0} />
-                  <Text fos={12} ml="$1" color="$gray12">Cash Dispenser</Text>
+                  <Text fos={12} ml="$1" color="$gray12">Last log time</Text>
                 </XStack>
-                <Text fos={12} fow="500" color="$access" mt="$1.5">Functional</Text>
+                <Text fos={12} fow="500" mt="$1.5">{formatDate(task.atm?.updatedAt)}</Text>
               </YStack>
               <HorizontalLine />
               <XStack>
-                <YStack p="$3" borderRightWidth={1} borderColor="$gray3" w="49%">
+                <YStack p="$3" borderRightWidth={1} borderColor="$gray3" w="49%" ai="flex-start">
                   <XStack ai="center">
                     <Icon name="power" size={12} padding={0} />
-                    <Text fos={12} ml="$1" color="$gray12">Power</Text>
+                    <Text fos={12} ml="$1" color="$gray12">Activity</Text>
                   </XStack>
-                  <Text fos={12} fow="500" color="$access" mt="$1.5">ON</Text>
+                  <StatusPill status={task.atm?.activitySatus} mt="$1.5" />
                 </YStack>
                 <YStack p="$3">
                   <XStack ai="center">
                     <Icon name="hourglass" size={12} padding={0} />
-                    <Text fos={12} ml="$1" color="$gray12">Uptime</Text>
+                    <Text fos={12} ml="$1" color="$gray12">Up last at</Text>
                   </XStack>
                   <Text fos={12} fow="500" mt="$1.5">23h</Text>
                 </YStack>

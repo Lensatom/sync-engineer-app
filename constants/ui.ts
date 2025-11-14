@@ -45,12 +45,20 @@ export const statusColors: Record<string, { fg: string; bg: string }> = {
     fg: "#138041",
     bg: "#03FF771F"
   },
+  " healthy": {
+    fg: "#138041",
+    bg: "#03FF771F"
+  },
   resolved: {
+    fg: "#138041",
+    bg: "#03FF771F"
+  },
+  online: {
     fg: "#138041",
     bg: "#03FF771F"
   },
   reassigned: {
     fg: "#FF19FF",
     bg: "#FF19FF1F"
-  }
+  }, 
 }

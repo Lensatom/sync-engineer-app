@@ -75,7 +75,7 @@ export function TaskCard({
           <Text fos={12} fow="600">View Route</Text>
         </Button>
         <XStack w="60%" pl="$3">
-          <Button size="sm" type="outlineGray" w="$full" pill>
+          <Button size="sm" type="outlineGray" w="$full" pill onPress={() => router.push(`/tasks/${details.id}`)}>
             <Text fos={12} fow="600">Update ATM Status</Text>
           </Button>
         </XStack>

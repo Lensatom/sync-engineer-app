@@ -36,6 +36,11 @@ export function Tasks() {
       title: "Unresolved",
       name: "unresolved",
       content: <TaskList status="UNRESOLVED" />
+    },
+    {
+      title: "Reassigned",
+      name: "reassigned",
+      content: <TaskList status="REASSIGNED" />
     }
   ], [])
 
@@ -45,7 +50,7 @@ export function Tasks() {
         <Avatar uri={image_uri} size={48} />
         <YStack ml={12}>
           <Text type="h1" tt="capitalize">Hi, {user?.firstName} {user?.lastName}</Text>
-          <Text type="sub1">do xyz to increase your Efficiency score</Text>
+          <Text type="sub1">Let's get things running again today!</Text>
         </YStack>
       </XStack>
 
