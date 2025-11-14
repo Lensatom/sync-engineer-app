@@ -1,7 +1,9 @@
+import { Container, Header } from '@/components/layout';
 import { Text } from '@/components/ui';
+import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { ScrollView } from 'react-native';
 import { View, XStack, YStack } from 'tamagui';
+import { useGetIssueHistory } from './api';
 
 type HistoryItem = {
   id: string;
@@ -30,65 +32,84 @@ const SAMPLE: HistoryItem[] = [
 export function IssueHistory() {
   const items = SAMPLE;
 
-  return (
-    <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <YStack gap="$6">
-        {items.map((it, idx) => {
-          const isFirst = idx === 0;
-          const isLast = idx === items.length - 1;
-          const activeColor = '#D43900';
-          const inactiveColor = '#D9D9D9';
+  const { atmId } = useLocalSearchParams()
 
-          return (
-            <XStack key={it.id} gap="$3">
-              {/* Timeline rail */}
-              <YStack w={20} ai="center">
-                {/* top connector */}
-                <View
-                  style={{
-                    width: 0,
-                    height: isFirst ? 10 : 16,
-                    borderLeftWidth: 2,
-                    borderColor: isFirst ? activeColor : '#E5E7EB',
-                    borderStyle: 'dashed',
-                  }}
-                />
-                {/* dot */}
-                <View
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: 999,
-                    backgroundColor: isFirst ? activeColor : 'white',
-                    borderWidth: 2,
-                    borderColor: isFirst ? activeColor : inactiveColor,
-                  }}
-                />
-                {/* bottom connector */}
-                {!isLast && (
+  console.log(atmId)
+
+  const { history, isLoading } = useGetIssueHistory({ id: atmId as string });
+
+  console.log(history)
+
+  if (isLoading) {
+    return (
+      <Container main ai="center" jc="center">
+        <Text>Loading...</Text>
+      </Container>
+    );
+  }
+  return (
+    <>
+      <Header title="Issue and Fix History" /> 
+      <Container main bg="white" pt="$4">
+        <YStack gap="$6">
+          {history.map((it, idx) => {
+            const isFirst = idx === 0;
+            const isLast = idx === history.length - 1;
+            const activeColor = '#D43900';
+            const inactiveColor = '#D9D9D9';
+
+            return (
+              <XStack key={it.id} gap="$3">
+                {/* Timeline rail */}
+                <YStack w={20} ai="center">
+                  {/* top connector */}
                   <View
                     style={{
                       width: 0,
-                      height: 40,
+                      height: isFirst ? 0 : 1,
                       borderLeftWidth: 2,
                       borderColor: isFirst ? activeColor : '#E5E7EB',
                       borderStyle: 'dashed',
                     }}
                   />
-                )}
-              </YStack>
+                  {/* dot */}
+                  <View
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: 999,
+                      backgroundColor: isFirst ? activeColor : 'white',
+                      borderWidth: 2,
+                      borderColor: isFirst ? activeColor : inactiveColor,
+                    }}
+                  />
+                  {/* bottom connector */}
+                  {!isLast && (
+                    <View
+                      style={{
+                        width: 0,
+                        height: 40,
+                        borderLeftWidth: 2,
+                        borderColor: isFirst ? activeColor : '#E5E7EB',
+                        borderStyle: 'dashed',
+                      }}
+                    />
+                  )}
+                </YStack>
 
-              {/* Content */}
-              <YStack flex={1} gap="$1">
-                <Text fos={12} color="$gray11">{formatTimeDate(it.timestamp)}</Text>
-                <Text fos={14} color="$gray12">
-                  <Text fos={14} fow="700" color="$gray12">{it.titleBold}</Text>{' '}{it.description}
-                </Text>
-              </YStack>
-            </XStack>
-          );
-        })}
-      </YStack>
-    </ScrollView>
+                {/* Content */}
+                <YStack flex={1} gap="$1">
+                  <Text fos={12} color="$gray11">{formatTimeDate(it.updatedAt)}</Text>
+                  <Text fos={14} color="$gray12">
+                    <Text fos={14} fow="700" color="$gray12" tt="capitalize">{it.taskTitle}</Text>{' '}{it.issueDescription}
+                  </Text>
+                </YStack>
+              </XStack>
+            );
+          })}
+        </YStack>
+        <View h={100} />
+      </Container>
+    </>
   );
 }

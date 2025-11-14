@@ -24,10 +24,7 @@ export function DiagnosisReport() {
             <Icon size={24} padding={0} name="info_warn" />
             <Text fos="$4" fow="600" color="$gray13">Probable Issues</Text>
           </XStack>
-          <Text mt="$2" p="$2" bg="#FFF7F5" br="$3">
-            Below is a complete, realistic, non-technical but believable AI Diagnostics section you can drop directly into the Task Details screen.
-All details are fake but logically accurate for an ATM fault.
-          </Text>
+          <Text mt="$2" p="$2" bg="#FFF7F5" br="$3">{report?.probableIssues}</Text>
         </YStack>
 
         <YStack bg="#E4FFF6" br="$3" p="$3" mt="$6">
@@ -35,10 +32,7 @@ All details are fake but logically accurate for an ATM fault.
             <Icon size={24} padding={0} name="wrench_green" />
             <Text fos="$4" fow="600" color="$gray13">AI Recommended Actions</Text>
           </XStack>
-          <Text mt="$2" p="$2" bg="#F5FFFC" br="$3">
-            Below is a complete, realistic, non-technical but believable AI Diagnostics section you can drop directly into the Task Details screen.
-All details are fake but logically accurate for an ATM fault.
-          </Text>
+          <Text mt="$2" p="$2" bg="#F5FFFC" br="$3">{report?.fixRecommendations}</Text>
         </YStack>
       </Container>
     </>

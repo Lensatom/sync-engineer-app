@@ -206,7 +206,7 @@ export function TaskDetails() {
               <Icon name="brain_purple" size={24} padding={0} />
               <Text fow="500" mt="$12" color="$gray12">AI Diagnosis Report</Text>
             </YStack>
-            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2" onPress={() => router.push(`/tasks/${id}/issue-history`)}>
+            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2" onPress={() => router.push({pathname: `/tasks/${id}/issue-history`, params: { atmId: task.atm?.id || "" } })}>
               <Icon name="clock_blue" size={24} padding={0} />
               <Text fow="500" mt="$12" color="$gray12">Issue and Fix History </Text>
             </YStack>

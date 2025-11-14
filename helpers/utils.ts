@@ -55,3 +55,11 @@ export async function openRouteTo(address: string) {
     console.warn('[maps] openRouteTo error', e);
   }
 }
+
+export const getEfficiencyScore = (email:string) => {
+  const scores:any = {
+    "inuoluwadunsimi1@gmail.com": 82,
+    "desiredestiny04@gmail.com": 76,
+  }
+  return scores[email] || 0;
+};

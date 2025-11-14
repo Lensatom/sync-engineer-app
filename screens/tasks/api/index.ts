@@ -69,3 +69,19 @@ export const useGetDiagnosisReport = ({ id } : { id: string }) => {
 
   return { report, ...rest };
 };
+
+export const useGetIssueHistory = ({ id } : { id: string }) => {
+  const { data: history, ...rest } = useQuery({
+    queryKey: ["tasks", id, "issue-history"],
+    queryFn: async () => {
+      const response = await GET({
+        route: `/tasks/atm/history/${id}`
+      });
+      return response.data;
+    }
+  });
+
+  console.log("useGetIssueHistory history:", history);
+
+  return { history, ...rest };
+};
