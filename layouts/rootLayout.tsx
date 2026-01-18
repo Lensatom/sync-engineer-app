@@ -11,6 +11,11 @@ import { TamaguiProvider, View } from 'tamagui';
 import '../utils/notifeeBackground';
 import { registerForPushNotificationsAsync, useNotificationListener } from '../utils/notifications';
 
+import { LogBox } from 'react-native';
+
+// Ignore all log notifications (including redbox errors)
+LogBox.ignoreAllLogs(true);
+
 export const unstable_settings = {
   anchor: '(tabs)',
 };
