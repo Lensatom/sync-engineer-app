@@ -1,52 +1,56 @@
-import { ATM_Image } from '@/assets/images'
-import { Container, Header } from '@/components/layout'
-import { StatusPill } from '@/components/shared'
-import { Button, HorizontalLine, Icon, Text } from '@/components/ui'
-import { completeStatus } from '@/constants/shared'
-import { statusColors } from '@/constants/ui'
-import { formatDate, openRouteTo } from '@/helpers/utils'
-import { router, useLocalSearchParams } from 'expo-router'
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator } from 'react-native'
-import { AnimatedCircularProgress } from 'react-native-circular-progress'
-import { View, XStack, YStack } from 'tamagui'
-import { useGetTaskById, useUpdateTaskStatus } from './api'
+import { ATM_Image } from "@/assets/images";
+import { Container, Header } from "@/components/layout";
+import { StatusPill } from "@/components/shared";
+import { Button, HorizontalLine, Icon, Text } from "@/components/ui";
+import { completeStatus } from "@/constants/shared";
+import { statusColors } from "@/constants/ui";
+import { formatDate, openRouteTo } from "@/helpers/utils";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { View, XStack, YStack } from "tamagui";
+import { useGetTaskById, useUpdateTaskStatus } from "./api";
 
 export function TaskDetails() {
-  const { id } = useLocalSearchParams()
+  const { id } = useLocalSearchParams();
 
   const { task, isLoading } = useGetTaskById({ id: id as string });
 
   const location = "No 23 Awolowo street, Lekki Phase 1, Lagos";
 
   const lastStatus = task?.statusDetails?.at(-1)?.status.toLowerCase();
-  const percentComplete = completeStatus.includes(lastStatus ?? "") ? 100 : 100 / (4 - (task?.statusDetails.length ?? 0))
+  const percentComplete = completeStatus.includes(lastStatus ?? "")
+    ? 100
+    : 100 / (4 - (task?.statusDetails.length ?? 0));
   const statusLog = task?.statusDetails || [];
-  const [adaptedLog, setAdaptedLog] = useState<any>([[], 0])
+  const [adaptedLog, setAdaptedLog] = useState<any>([[], 0]);
 
   const makeArray = (len: number) => Array.from({ length: len });
 
-  const { updateTaskStatus, isPending } = useUpdateTaskStatus({ id: id as string });
+  const { updateTaskStatus, isPending } = useUpdateTaskStatus({
+    id: id as string,
+  });
 
   const getLogLength = () => {
     const length = statusLog.length;
     if (completeStatus.includes(lastStatus)) {
-      return [makeArray(length), (100 / length) - 1];
+      return [makeArray(length), 100 / length - 1];
     } else {
-      return [makeArray(3), (100 / 3) - 1];
+      return [makeArray(3), 100 / 3 - 1];
     }
-  }
+  };
 
   const changeStatus = (status: string) => {
     updateTaskStatus({ status });
-  }
+  };
 
   useEffect(() => {
     if (task && !isLoading) {
       const [array, percent] = getLogLength();
       setAdaptedLog([array, percent]);
     }
-  }, [task, isLoading])
+  }, [task, isLoading]);
 
   if (isLoading) {
     return (
@@ -60,98 +64,203 @@ export function TaskDetails() {
       <Header
         title="Task Details"
         RightComp={() => {
-          return (
-            <Icon name="info" size={24} padding={8} />
-          )
+          return <Icon name="info" size={24} padding={8} />;
         }}
       />
 
       <Container main pt="$3">
         <XStack ai="center">
-          <View bg="$gray2" w={50} h={50} jc="center" ai="center" overflow='visible' borderWidth={3} borderColor="$gray3" br="$full">
+          <View
+            bg="$gray2"
+            w={50}
+            h={50}
+            jc="center"
+            ai="center"
+            overflow="visible"
+            borderWidth={3}
+            borderColor="$gray3"
+            br="$full"
+          >
             <AnimatedCircularProgress
               size={54}
               width={4}
               fill={percentComplete}
               rotation={0}
-              lineCap='round'
+              lineCap="round"
               tintColor={statusColors[lastStatus]?.fg}
               backgroundColor="white"
             >
-              {() => (
-                  <Icon name="wrench" size={16} padding={0} />
-                )}
+              {() => <Icon name="wrench" size={16} padding={0} />}
             </AnimatedCircularProgress>
           </View>
           <YStack ml="$2" gap="$0.5" flex={1}>
-            <Text fos={10} color="$gray12" tt="uppercase">ZENITH BANK ATM #{task?.id?.split("-")[1]}</Text>
+            <Text fos={10} color="$gray12" tt="uppercase">
+              ZENITH BANK ATM #{task?.id?.split("-")[1]}
+            </Text>
             <XStack>
-              <Text fos={12} fow="500" tt="capitalize">{task?.taskTitle}</Text>
+              <Text fos={12} fow="500" tt="capitalize">
+                {task?.taskTitle}
+              </Text>
               <StatusPill status={lastStatus} ml="$1.5" />
             </XStack>
             <XStack ai="center">
-              <Text fos={10} color="$gray12" mr="$1">{location}</Text>
+              <Text fos={10} color="$gray12" mr="$1">
+                {location}
+              </Text>
               <Icon name="location" size={14} padding={0} />
             </XStack>
           </YStack>
         </XStack>
-        
+
         <YStack mt="$8">
-          <Text fos={14} fow="500" color="$gray12">Task Status</Text>
+          <Text fos={14} fow="500" color="$gray12">
+            Task Status
+          </Text>
           <YStack mt="$3">
             <XStack h="$4">
-              <XStack bg="$gray2" br="$full" h="$2" w="$full">
-              </XStack>
+              <XStack bg="$gray2" br="$full" h="$2" w="$full"></XStack>
             </XStack>
-            
+
             <XStack jc="space-between" pos="absolute" top={0} w="$full">
-              {adaptedLog[0].map((status:any, index:number) => {
-                const pos = index + 1
-                const isLast = statusLog[index]?.status.toLowerCase() === lastStatus
+              {adaptedLog[0].map((status: any, index: number) => {
+                const pos = index + 1;
+                const isLast =
+                  statusLog[index]?.status.toLowerCase() === lastStatus;
                 return (
-                  <YStack w={`${adaptedLog[1]}%`} ai={pos === 1 ? "flex-start" : pos === adaptedLog[0].length ? "flex-end" : "center"}>
-                      {statusLog[index] && (
-                        <>
-                          <XStack h="$2" w="$full" bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"} br="$full" ai="center" jc={pos === 1 ? "flex-start" : pos === adaptedLog[0].length ? "flex-end" : "center"} overflow='visible'>
-                            <View w="$4" h="$4" borderWidth={3} bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"} borderColor="$white" br="$full" elevationAndroid={2}></View>
-                          </XStack>
-                          <Text fos={11} fow="600" mt="$3" color="$gray12" tt="capitalize">{statusLog[index]?.status.toLowerCase()}</Text>
-                          <Text fos={9} color="$gray12" mt="$1">{formatDate(statusLog[index]?.time)}</Text>
-                        </>
-                      )}
-                    </YStack>
-                )
+                  <YStack
+                    w={`${adaptedLog[1]}%`}
+                    ai={
+                      pos === 1
+                        ? "flex-start"
+                        : pos === adaptedLog[0].length
+                          ? "flex-end"
+                          : "center"
+                    }
+                  >
+                    {statusLog[index] && (
+                      <>
+                        <XStack
+                          h="$2"
+                          w="$full"
+                          bg={isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"}
+                          br="$full"
+                          ai="center"
+                          jc={
+                            pos === 1
+                              ? "flex-start"
+                              : pos === adaptedLog[0].length
+                                ? "flex-end"
+                                : "center"
+                          }
+                          overflow="visible"
+                        >
+                          <View
+                            w="$4"
+                            h="$4"
+                            borderWidth={3}
+                            bg={
+                              isLast ? statusColors[lastStatus]?.fg : "#E0E1E6"
+                            }
+                            borderColor="$white"
+                            br="$full"
+                            elevationAndroid={2}
+                          ></View>
+                        </XStack>
+                        <Text
+                          fos={11}
+                          fow="600"
+                          mt="$3"
+                          color="$gray12"
+                          tt="capitalize"
+                        >
+                          {statusLog[index]?.status.toLowerCase()}
+                        </Text>
+                        <Text fos={9} color="$gray12" mt="$1">
+                          {formatDate(statusLog[index]?.time)}
+                        </Text>
+                      </>
+                    )}
+                  </YStack>
+                );
               })}
             </XStack>
-            
+
             {lastStatus === "reassigned" || lastStatus === "unresolved" ? (
-              <XStack mt={55} py="$2" px="$3" borderWidth={1} borderColor="$gray3" br="$2">
+              <XStack
+                mt={55}
+                py="$2"
+                px="$3"
+                borderWidth={1}
+                borderColor="$gray3"
+                br="$2"
+              >
                 <Icon name="info" size={20} padding={0} />
-                <Text fos={11} pl="$2" pr="$10" lh={17}>This task has been reassigned to another engineer. Kindly stop all actions related to this task on the ATM</Text>
+                <Text fos={11} pl="$2" pr="$10" lh={17}>
+                  This task has been reassigned to another engineer. Kindly stop
+                  all actions related to this task on the ATM
+                </Text>
               </XStack>
             ) : lastStatus === "fixed" || lastStatus === "resolved" ? (
-              <XStack mt={55} ai="center" py="$2" px="$3" borderWidth={1} borderColor="$gray3" br="$2">
+              <XStack
+                mt={55}
+                ai="center"
+                py="$2"
+                px="$3"
+                borderWidth={1}
+                borderColor="$gray3"
+                br="$2"
+              >
                 <Icon name="info" size={20} padding={0} />
-                <Text fos={11} pl="$2" pr="$10" lh={17}>Thank you for fixing this issue</Text>
+                <Text fos={11} pl="$2" pr="$10" lh={17}>
+                  Thank you for fixing this issue
+                </Text>
               </XStack>
             ) : (
               <XStack mt={55} jc="space-between">
                 {lastStatus === "inprogress" ? (
                   <>
-                    <Button isLoading={isPending} w="49%" pill type="outlineGray" onPress={() => changeStatus('UNRESOLVED')}>
+                    <Button
+                      isLoading={isPending}
+                      w="49%"
+                      pill
+                      type="outlineGray"
+                      onPress={() => changeStatus("UNRESOLVED")}
+                    >
                       <Text fow="600">Set as Unresolved</Text>
                     </Button>
-                    <Button isLoading={isPending} w="49%" pill type="dark" onPress={() => changeStatus('RESOLVED')}>
-                      <Text fow="600" color="$white">Set as Resolved</Text>
+                    <Button
+                      isLoading={isPending}
+                      w="49%"
+                      pill
+                      type="dark"
+                      onPress={() => changeStatus("RESOLVED")}
+                    >
+                      <Text fow="600" color="$white">
+                        Set as Resolved
+                      </Text>
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button isLoading={isPending} w="49%" pill type="outlineGray" onPress={() => openRouteTo(location)}>
+                    <Button
+                      isLoading={isPending}
+                      w="49%"
+                      pill
+                      type="outlineGray"
+                      onPress={() => openRouteTo(location)}
+                    >
                       <Text fow="600">View Route</Text>
                     </Button>
-                    <Button isLoading={isPending} w="49%" pill type="dark" onPress={() => changeStatus('INPROGRESS')}>
-                      <Text fow="600" color="$white">Start Repair</Text>
+                    <Button
+                      isLoading={isPending}
+                      w="49%"
+                      pill
+                      type="dark"
+                      onPress={() => changeStatus("INPROGRESS")}
+                    >
+                      <Text fow="600" color="$white">
+                        Start Repair
+                      </Text>
                     </Button>
                   </>
                 )}
@@ -161,14 +270,18 @@ export function TaskDetails() {
         </YStack>
 
         <YStack mt={46}>
-          <Text color="$gray12" fow="500">Diagnostics and Metrics</Text>
-          
+          <Text color="$gray12" fow="500">
+            Diagnostics and Metrics
+          </Text>
+
           <XStack gap="$3" mt="$3">
             <YStack borderWidth={1.5} borderColor="$gray3" br="$2" flex={1}>
               <YStack p="$3" ai="flex-start">
                 <XStack ai="center">
                   <Icon name="health" size={12} padding={0} />
-                  <Text fos={12} ml="$1" color="$gray12">ATM Health</Text>
+                  <Text fos={12} ml="$1" color="$gray12">
+                    ATM Health
+                  </Text>
                 </XStack>
                 <StatusPill status={task.atm?.healthStatus} mt="$1.5" />
               </YStack>
@@ -176,25 +289,41 @@ export function TaskDetails() {
               <YStack p="$3">
                 <XStack ai="center">
                   <Icon name="network" size={12} padding={0} />
-                  <Text fos={12} ml="$1" color="$gray12">Last log time</Text>
+                  <Text fos={12} ml="$1" color="$gray12">
+                    Last log time
+                  </Text>
                 </XStack>
-                <Text fos={12} fow="500" mt="$1.5">{formatDate(task.atm?.updatedAt)}</Text>
+                <Text fos={12} fow="500" mt="$1.5">
+                  {formatDate(task.atm?.updatedAt)}
+                </Text>
               </YStack>
               <HorizontalLine />
               <XStack>
-                <YStack p="$3" borderRightWidth={1} borderColor="$gray3" w="49%" ai="flex-start">
+                <YStack
+                  p="$3"
+                  borderRightWidth={1}
+                  borderColor="$gray3"
+                  w="49%"
+                  ai="flex-start"
+                >
                   <XStack ai="center">
                     <Icon name="power" size={12} padding={0} />
-                    <Text fos={12} ml="$1" color="$gray12">Activity</Text>
+                    <Text fos={12} ml="$1" color="$gray12">
+                      Activity
+                    </Text>
                   </XStack>
                   <StatusPill status={task.atm?.activitySatus} mt="$1.5" />
                 </YStack>
                 <YStack p="$3">
                   <XStack ai="center">
                     <Icon name="hourglass" size={12} padding={0} />
-                    <Text fos={12} ml="$1" color="$gray12">Up last at</Text>
+                    <Text fos={12} ml="$1" color="$gray12">
+                      Up last at
+                    </Text>
                   </XStack>
-                  <Text fos={12} fow="500" mt="$1.5">23h</Text>
+                  <Text fos={12} fow="500" mt="$1.5">
+                    23h
+                  </Text>
                 </YStack>
               </XStack>
             </YStack>
@@ -202,17 +331,38 @@ export function TaskDetails() {
           </XStack>
 
           <XStack mt="$3" jc="space-between">
-            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2" onPress={() => router.push(`/tasks/${id}/diagnosis-report`)}>
+            <YStack
+              p="$3.5"
+              bg="$gray2"
+              width="48.5%"
+              br="$2"
+              onPress={() => router.push(`/tasks/${id}/diagnosis-report`)}
+            >
               <Icon name="brain_purple" size={24} padding={0} />
-              <Text fow="500" mt="$12" color="$gray12">AI Diagnosis Report</Text>
+              <Text fow="500" mt="$12" color="$gray12">
+                AI Diagnosis Report
+              </Text>
             </YStack>
-            <YStack p="$3.5" bg="$gray2" width="48.5%" br="$2" onPress={() => router.push({pathname: `/tasks/${id}/issue-history`, params: { atmId: task.atm?.id || "" } })}>
+            <YStack
+              p="$3.5"
+              bg="$gray2"
+              width="48.5%"
+              br="$2"
+              onPress={() =>
+                router.push({
+                  pathname: `/tasks/${id}/issue-history` as any,
+                  params: { atmId: task.atm?.id || "" },
+                })
+              }
+            >
               <Icon name="clock_blue" size={24} padding={0} />
-              <Text fow="500" mt="$12" color="$gray12">Issue and Fix History </Text>
+              <Text fow="500" mt="$12" color="$gray12">
+                Issue and Fix History{" "}
+              </Text>
             </YStack>
           </XStack>
         </YStack>
       </Container>
     </>
-  )
+  );
 }
