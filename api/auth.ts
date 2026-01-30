@@ -3,15 +3,15 @@ import { setAccessToken } from "@/helpers/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useLogin = () => {
-  const { mutateAsync:login, ...rest } = useMutation({
+  const { mutateAsync: login, ...rest } = useMutation({
     mutationKey: ["user-login"],
-    mutationFn: async ({email}: {email: string}) => {
+    mutationFn: async ({ email }: { email: string }) => {
       const response = await POST({
         route: "/auth/login",
         data: { email },
       });
-      setAccessToken(response.data.token)
-    }
+      return response;
+    },
   });
 
   return { login, ...rest };
@@ -25,22 +25,22 @@ export const useRetrieveUser = () => {
         route: "/user/me",
       });
       return response.data;
-    }
+    },
   });
 
   return { user, ...rest };
 };
 
 export const useUpdateNotifToken = () => {
-  const { mutateAsync:updateNotifToken, ...rest } = useMutation({
+  const { mutateAsync: updateNotifToken, ...rest } = useMutation({
     mutationKey: ["notification"],
-    mutationFn: async ({expoToken}: {expoToken: string}) => {
+    mutationFn: async ({ expoToken }: { expoToken: string }) => {
       const response = await PATCH({
         route: "/user/token",
         data: { expoToken },
       });
-      setAccessToken(response.data.token)
-    }
+      setAccessToken(response.data.token);
+    },
   });
 
   return { updateNotifToken, ...rest };

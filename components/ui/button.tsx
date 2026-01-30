@@ -1,9 +1,9 @@
-import * as icons from "@/assets/icons"
-import { PADDING_X } from "@/constants/theme"
-import React, { ComponentProps, forwardRef } from 'react'
-import { ActivityIndicator } from "react-native"
-import { styled, TamaguiElement, Button as TMButton } from 'tamagui'
-import { Icon } from "./icon"
+import * as icons from "@/assets/icons";
+import { PADDING_X } from "@/constants/theme";
+import React, { ComponentProps, forwardRef } from "react";
+import { ActivityIndicator } from "react-native";
+import { styled, TamaguiElement, Button as TMButton } from "tamagui";
+import { Icon } from "./icon";
 
 const BaseButton = styled(TMButton, {
   px: 32,
@@ -23,8 +23,8 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$primary1",
           borderColor: "$colorTransparent",
-          opacity: 0.8
-        }
+          opacity: 0.8,
+        },
       },
       secondary: {
         bg: "$primary2",
@@ -34,8 +34,8 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$primary2",
           borderColor: "$colorTransparent",
-          opacity: 0.8
-        }
+          opacity: 0.8,
+        },
       },
       outline: {
         bg: "$colorTransparent",
@@ -45,8 +45,8 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$colorTransparent",
           borderColor: "$colorTransparent",
-          opacity: 0.8
-        }
+          opacity: 0.8,
+        },
       },
       outlineGray: {
         bg: "$colorTransparent",
@@ -56,8 +56,8 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$colorTransparent",
           borderColor: "$colorTransparent",
-          opacity: 0.8
-        }
+          opacity: 0.8,
+        },
       },
       disabled: {
         bg: "$gray4",
@@ -68,8 +68,8 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$gray4",
           borderColor: "$colorTransparent",
-          opacity: 0.8
-        }
+          opacity: 0.8,
+        },
       },
       light: {
         bg: "$white",
@@ -79,8 +79,8 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$white",
           borderColor: "$colorTransparent",
-          opacity: 0.8
-        }
+          opacity: 0.8,
+        },
       },
       dark: {
         bg: "$black",
@@ -90,8 +90,8 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$black",
           borderColor: "$colorTransparent",
-          opacity: 0.8
-        }
+          opacity: 0.8,
+        },
       },
       ghost: {
         bg: "$colorTransparent",
@@ -103,9 +103,9 @@ const BaseButton = styled(TMButton, {
         pressStyle: {
           bg: "$transparent",
           borderColor: "$colorTransparent",
-          opacity: 0.5
-        }
-      }
+          opacity: 0.5,
+        },
+      },
     },
     size: {
       md: {},
@@ -118,51 +118,54 @@ const BaseButton = styled(TMButton, {
     },
     full: {
       true: {
-        width: "100%"
-      }
+        width: "100%",
+      },
     },
     pill: {
       true: {
-        br: "$full"
-      }
-    }
+        br: "$full",
+      },
+    },
   } as const,
   defaultVariants: {
-    type: "primary"
+    type: "primary",
   },
-})
+});
 
-type BaseButtonType = Omit<ComponentProps<typeof BaseButton>, "loading">
+type BaseButtonType = Omit<ComponentProps<typeof BaseButton>, "loading">;
 interface Props extends BaseButtonType {
-  children?: React.ReactNode
-  text?: string
-  iconName?: keyof typeof icons
-  isLoading?: boolean
+  children?: React.ReactNode;
+  text?: string;
+  iconName?: keyof typeof icons;
+  isLoading?: boolean;
 }
 
-export const Button = forwardRef<TamaguiElement, Props>(({
-  children,
-  isLoading,
-  text,
-  type = "primary",
-  iconName,
-  ...props
-}, ref) => {
-  
-  return (
-    <BaseButton
-      type={props.disabled ? "disabled" : type}
-      opacity={props.disabled || isLoading ? 0.6 : 1}
-      disabled={isLoading ? true : props.disabled}
-      {...props}
-      ref={ref}
-    >
-      {iconName && <Icon name={iconName} padding={0} size={20} />}
-      {text ? (
-        isLoading ? <ActivityIndicator color="white" /> : text
-      ) : (
-        isLoading ? <ActivityIndicator color="white" /> : children
-      )}
-    </BaseButton>
-  )
-})
+export const Button = forwardRef<TamaguiElement, Props>(
+  (
+    { children, isLoading, text, type = "primary", iconName, ...props },
+    ref,
+  ) => {
+    return (
+      <BaseButton
+        type={type}
+        opacity={props.disabled || isLoading ? 0.6 : 1}
+        disabled={isLoading ? true : props.disabled}
+        {...props}
+        ref={ref}
+      >
+        {iconName && <Icon name={iconName} padding={0} size={20} />}
+        {text ? (
+          isLoading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            text
+          )
+        ) : isLoading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          children
+        )}
+      </BaseButton>
+    );
+  },
+);
