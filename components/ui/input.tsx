@@ -77,14 +77,9 @@ export const Input = forwardRef<any, Props>(
     };
 
     return (
-      <YStack
-        onTouchStart={(e) => e.stopPropagation()}
-        w="$full"
-        gap="$1.5"
-        jc="center"
-      >
+      <YStack onTouchStart={(e) => e.stopPropagation()} w="$full" jc="center">
         {label && (
-          <Text fos={13} fow="500" color="$gray12">
+          <Text fos={13} fow="500" color="$gray12" mb="$1.5">
             {label}
           </Text>
         )}
@@ -113,7 +108,7 @@ export const Input = forwardRef<any, Props>(
             }
             keyboardType={phone ? "phone-pad" : props.keyboardType}
             {...props}
-            borderColor={error ? "$danger" : props.borderColor}
+            borderColor={error ? "red" : props.borderColor}
             placeholderTextColor="$gray8"
           />
 
@@ -127,7 +122,7 @@ export const Input = forwardRef<any, Props>(
         </View>
 
         {error && (
-          <Text fontSize="$2" fow="400" color="$danger">
+          <Text fontSize="$3" fow="400" color="red" mt="$1">
             {error}
           </Text>
         )}

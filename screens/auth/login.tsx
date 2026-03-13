@@ -1,18 +1,18 @@
-import { useLogin } from "@/api/auth";
 import { Container } from "@/components/layout";
 import { Button, Input, Text } from "@/components/ui";
 import { setAccessToken } from "@/helpers/api";
+import { useForm } from "@/hooks/use-form";
 import { useUser } from "@/layouts/rootLayout";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { View, XStack, YStack } from "tamagui";
+import { useLogin } from "./api";
 
 export function Login() {
   const { login, isPending } = useLogin();
   const { setUser } = useUser();
-  const [form, setForm] = useState({
-    email: "",
-  });
+  const initialValues = { email: "" };
+  const { data, changeData, error, changeError } = useForm(initialValues);
 
   const isEmailValid = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,12 +20,15 @@ export function Login() {
   };
 
   const handleLogin = async () => {
-    if (!isEmailValid(form.email)) return;
+    if (!isEmailValid(data.email)) {
+      changeError("email", "Invalid email address");
+      return;
+    }
     try {
-      const res = await login({ email: form.email });
-      const data = res?.data;
-      setAccessToken(data?.token);
-      setUser(data?.user);
+      const res = await login({ email: data.email });
+      const resData = res?.data;
+      setAccessToken(resData?.token);
+      setUser(resData?.user);
       router.replace("/");
     } catch (error) {
       console.error("Login error:", error);
@@ -46,12 +49,13 @@ export function Login() {
       <YStack mt="$7" gap="$1.5" w="$full">
         <View w="$full" mt="$4">
           <Input
-            value={form.email}
+            value={data.email}
             label="Email"
             placeholder="Enter your email address"
-            onChangeText={(text) => setForm({ ...form, email: text })}
+            onChangeText={(text) => changeData("email", text)}
             br="$2"
             keyboardType="email-address"
+            error={error.email}
           />
         </View>
 
@@ -62,7 +66,7 @@ export function Login() {
           onPress={handleLogin}
           text="Continue"
           isLoading={isPending}
-          disabled={!isEmailValid(form.email)}
+          disabled={!isEmailValid(data.email)}
         />
 
         <XStack mt="$4" jc="center" gap="$1" ai="center">

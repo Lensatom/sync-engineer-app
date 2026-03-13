@@ -1,23 +1,32 @@
-import { useRetrieveUser, useUpdateNotifToken } from '@/api/auth';
-import { queryClient } from '@/config/tanstack';
-import config from '@/tamagui.config';
-import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { router, Stack } from 'expo-router';
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, StatusBar } from 'react-native';
-import 'react-native-reanimated';
-import { TamaguiProvider, View } from 'tamagui';
-import '../utils/notifeeBackground';
-import { registerForPushNotificationsAsync, useNotificationListener } from '../utils/notifications';
+import { useRetrieveUser, useUpdateNotifToken } from "@/api/auth";
+import { queryClient } from "@/config/tanstack";
+import config from "@/tamagui.config";
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { router, Stack } from "expo-router";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { ActivityIndicator, StatusBar } from "react-native";
+import "react-native-reanimated";
+import { TamaguiProvider, View } from "tamagui";
+import "../utils/notifeeBackground";
+import {
+  registerForPushNotificationsAsync,
+  useNotificationListener,
+} from "../utils/notifications";
 
-import { LogBox } from 'react-native';
+import { LogBox } from "react-native";
 
 // Ignore all log notifications (including redbox errors)
 LogBox.ignoreAllLogs(true);
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: "(tabs)",
 };
 
 type UserContextValue = {
@@ -32,7 +41,7 @@ const UserContext = createContext<UserContextValue | undefined>(undefined);
 
 export function useUser() {
   const ctx = useContext(UserContext);
-  if (!ctx) throw new Error('useUser must be used within UserProvider');
+  if (!ctx) throw new Error("useUser must be used within UserProvider");
   return ctx;
 }
 
@@ -40,22 +49,28 @@ function UserProvider({ children }: { children: React.ReactNode }) {
   const { user: fetchedUser, isLoading, refetch } = useRetrieveUser();
   const [user, setUser] = useState<any>(fetchedUser);
 
-  const refresh = useCallback(() => { refetch(); }, [refetch]);
+  const refresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
   const signOut = useCallback(async () => {
-    try { await queryClient.clear(); } catch {}
+    try {
+      queryClient.clear();
+    } catch {}
     setUser(null);
-    router.replace('/login');
+    router.replace("/register");
   }, []);
 
   useEffect(() => {
     if (!isLoading && !fetchedUser) {
-      router.replace('/login');
+      router.replace("/register");
     }
     setUser(fetchedUser);
   }, [fetchedUser, isLoading]);
 
   return (
-    <UserContext.Provider value={{ user, isLoading, refresh, signOut, setUser }}>
+    <UserContext.Provider
+      value={{ user, isLoading, refresh, signOut, setUser }}
+    >
       {children}
     </UserContext.Provider>
   );
@@ -77,7 +92,7 @@ export function RootLayout() {
 
 function RootContent() {
   const { updateNotifToken } = useUpdateNotifToken();
-  
+
   useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
@@ -89,7 +104,7 @@ function RootContent() {
       await updateNotifToken({ expoToken });
     }
 
-    registerForPushNotificationsAsync().then(token => {
+    registerForPushNotificationsAsync().then((token) => {
       if (token) {
         sendTokenToServer(token);
       }
@@ -104,6 +119,6 @@ function RootContent() {
       <ActivityIndicator size="large" color="#D43900" />
     </View>
   ) : (
-    <Stack screenOptions={{ headerShown: false, statusBarStyle: 'dark' }} />
+    <Stack screenOptions={{ headerShown: false, statusBarStyle: "dark" }} />
   );
 }

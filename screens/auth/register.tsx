@@ -3,8 +3,9 @@ import { Button, Input, Text } from "@/components/ui";
 import { setAccessToken } from "@/helpers/api";
 import { useForm } from "@/hooks/use-form";
 import { useUser } from "@/layouts/rootLayout";
+import { getExpoPushTokenAsync } from "expo-notifications";
 import { router } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { View, XStack, YStack } from "tamagui";
 import { useRegister } from "./api";
 
@@ -15,8 +16,22 @@ export function Register() {
     email: "",
     firstName: "",
     lastName: "",
+    role: "ENGINEER",
+    expoToken: "",
+    phoneNumber: "09136852885",
+    geolocation: {
+      latitude: "40.7128",
+      longitude: "-74.0060",
+    },
   };
   const { data, changeData, error, changeError } = useForm(initialValues);
+
+  useEffect(() => {
+    (async () => {
+      const token = await getExpoPushTokenAsync();
+      changeData("expoToken", token.data);
+    })();
+  }, []);
 
   const isEmailValid = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -74,6 +89,7 @@ export function Register() {
               label="First Name"
               placeholder="Enter your firstname"
               onChangeText={(text) => changeData("firstName", text)}
+              error={error.firstName}
               br="$2"
             />
           </View>
@@ -83,6 +99,7 @@ export function Register() {
               label="Last Name"
               placeholder="Enter your lastname"
               onChangeText={(text) => changeData("lastName", text)}
+              error={error.lastName}
               br="$2"
             />
           </View>
@@ -93,6 +110,7 @@ export function Register() {
             label="Email"
             placeholder="Enter your email address"
             onChangeText={(text) => changeData("email", text)}
+            error={error.email}
             br="$2"
             keyboardType="email-address"
           />
@@ -105,7 +123,6 @@ export function Register() {
           onPress={handleRegister}
           text="Continue"
           isLoading={isPending}
-          disabled={!isEmailValid(data.email)}
         />
 
         <XStack mt="$4" jc="center" gap="$1" ai="center">

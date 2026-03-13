@@ -19,10 +19,14 @@ export const useLogin = () => {
 export const useRegister = () => {
   const { mutateAsync: register, ...rest } = useMutation({
     mutationKey: ["user"],
-    mutationFn: async ({ email }: { email: string }) => {
+    mutationFn: async (data: {
+      email: string;
+      firstName: string;
+      lastName: string;
+    }) => {
       const response = await POST({
-        route: "/auth/register",
-        data: { email },
+        route: "/auth/signup",
+        data,
       });
       return response;
     },
