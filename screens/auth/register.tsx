@@ -1,36 +1,57 @@
-import { useLogin } from "@/api/auth";
 import { Container } from "@/components/layout";
 import { Button, Input, Text } from "@/components/ui";
 import { setAccessToken } from "@/helpers/api";
+import { useForm } from "@/hooks/use-form";
 import { useUser } from "@/layouts/rootLayout";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { View, XStack, YStack } from "tamagui";
+import { useRegister } from "./api";
 
 export function Register() {
-  const { login, isPending } = useLogin();
+  const { register, isPending } = useRegister();
   const { setUser } = useUser();
-  const [form, setForm] = useState({
+  const initialValues = {
     email: "",
     firstName: "",
     lastName: "",
-  });
+  };
+  const { data, changeData, error, changeError } = useForm(initialValues);
 
   const isEmailValid = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleLogin = async () => {
-    if (!isEmailValid(form.email)) return;
+  const validateForm = () => {
+    let isValid = true;
+
+    if (data.firstName.trim() === "") {
+      isValid = false;
+      changeError("firstName", "First name is required");
+    }
+    if (data.lastName.trim() === "") {
+      isValid = false;
+      changeError("lastName", "Last name is required");
+    }
+    if (!isEmailValid(data.email)) {
+      isValid = false;
+      changeError("email", "Invalid email address");
+    }
+
+    return isValid;
+  };
+
+  const handleRegister = async () => {
+    if (!validateForm()) return;
     try {
-      const res = await login({ email: form.email });
-      const data = res?.data;
-      setAccessToken(data?.token);
-      setUser(data?.user);
+      const res = await register(data);
+      const responseData = res?.data;
+      setAccessToken(responseData?.token);
+      setUser(responseData?.user);
       router.replace("/");
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Register error:", error);
     }
   };
 
@@ -49,29 +70,29 @@ export function Register() {
         <XStack w="$full" gap="$2" jc="space-between">
           <View w="48%" mt="$4">
             <Input
-              value={form.firstName}
+              value={data.firstName}
               label="First Name"
               placeholder="Enter your firstname"
-              onChangeText={(text) => setForm({ ...form, firstName: text })}
+              onChangeText={(text) => changeData("firstName", text)}
               br="$2"
             />
           </View>
           <View w="48%" mt="$4">
             <Input
-              value={form.lastName}
+              value={data.lastName}
               label="Last Name"
               placeholder="Enter your lastname"
-              onChangeText={(text) => setForm({ ...form, lastName: text })}
+              onChangeText={(text) => changeData("lastName", text)}
               br="$2"
             />
           </View>
         </XStack>
         <View w="$full" mt="$4">
           <Input
-            value={form.email}
+            value={data.email}
             label="Email"
             placeholder="Enter your email address"
-            onChangeText={(text) => setForm({ ...form, email: text })}
+            onChangeText={(text) => changeData("email", text)}
             br="$2"
             keyboardType="email-address"
           />
@@ -81,10 +102,10 @@ export function Register() {
           mt="$7"
           w="$full"
           br="$2"
-          onPress={handleLogin}
+          onPress={handleRegister}
           text="Continue"
           isLoading={isPending}
-          disabled={!isEmailValid(form.email)}
+          disabled={!isEmailValid(data.email)}
         />
 
         <XStack mt="$4" jc="center" gap="$1" ai="center">
