@@ -1,2 +1,2 @@
-export { Login as default } from '@/screens/auth';
+export { Login as default } from "@/screens/auth";
 

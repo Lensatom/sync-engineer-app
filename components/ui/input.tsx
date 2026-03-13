@@ -6,7 +6,7 @@ const BaseInput = styled(TMInput, {
   w: "100%",
   h: 40,
   fontSize: 14,
-  px: 20,
+  px: 10,
   // py: "$4",
   br: "$6",
   color: "$dark.80",
@@ -84,7 +84,7 @@ export const Input = forwardRef<any, Props>(
         jc="center"
       >
         {label && (
-          <Text fos="$3" fow="500" mb="$0.5">
+          <Text fos={13} fow="500" color="$gray12">
             {label}
           </Text>
         )}
@@ -108,7 +108,6 @@ export const Input = forwardRef<any, Props>(
             ref={ref}
             secureTextEntry={!!hash}
             cursorColor={"black"}
-            paddingLeft={phone ? 74 : 20}
             onChangeText={
               phone ? (value) => onChangePhone(value) : onChangeText
             }

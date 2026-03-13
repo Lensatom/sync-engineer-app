@@ -7,7 +7,7 @@ export const useLogin = () => {
     mutationKey: ["user-login"],
     mutationFn: async ({ email }: { email: string }) => {
       const response = await POST({
-        route: "/auth/login",
+        route: "/auth/signup",
         data: { email },
       });
       return response;

@@ -7,11 +7,13 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { View, XStack, YStack } from "tamagui";
 
-export function Login() {
+export function Register() {
   const { login, isPending } = useLogin();
   const { setUser } = useUser();
   const [form, setForm] = useState({
     email: "",
+    firstName: "",
+    lastName: "",
   });
 
   const isEmailValid = (email: string) => {
@@ -36,7 +38,7 @@ export function Login() {
     <Container ai="center" jc="center">
       <YStack w="$full">
         <Text fos="$7" fow="800" color="$primary11">
-          Welcome back!
+          Track and fix{"\n"}Atm faults much easier.
         </Text>
         <Text mt="$2" fos={15} color="$gray11" pr="$10">
           Enter your details to use the engineer app.
@@ -44,6 +46,26 @@ export function Login() {
       </YStack>
 
       <YStack mt="$7" gap="$1.5" w="$full">
+        <XStack w="$full" gap="$2" jc="space-between">
+          <View w="48%" mt="$4">
+            <Input
+              value={form.firstName}
+              label="First Name"
+              placeholder="Enter your firstname"
+              onChangeText={(text) => setForm({ ...form, firstName: text })}
+              br="$2"
+            />
+          </View>
+          <View w="48%" mt="$4">
+            <Input
+              value={form.lastName}
+              label="Last Name"
+              placeholder="Enter your lastname"
+              onChangeText={(text) => setForm({ ...form, lastName: text })}
+              br="$2"
+            />
+          </View>
+        </XStack>
         <View w="$full" mt="$4">
           <Input
             value={form.email}
@@ -56,7 +78,7 @@ export function Login() {
         </View>
 
         <Button
-          mt="$10"
+          mt="$7"
           w="$full"
           br="$2"
           onPress={handleLogin}
@@ -66,15 +88,15 @@ export function Login() {
         />
 
         <XStack mt="$4" jc="center" gap="$1" ai="center">
-          <Text>Do not have an account?</Text>
+          <Text>Already have an account?</Text>
           <Button
             size="sm"
             type="ghost"
             px={0}
-            onPress={() => router.push("/register")}
+            onPress={() => router.push("/login")}
           >
             <Text color="$primary11" fow="600">
-              Register
+              Login
             </Text>
           </Button>
         </XStack>
